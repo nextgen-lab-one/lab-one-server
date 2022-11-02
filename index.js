@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 const doctorRoutes = require("./routes/doctor-routes");
 const patientRoutes = require("./routes/patient-routes");
 const adminRoutes = require("./routes/admin-routes");
@@ -23,6 +24,9 @@ const accessLogStream = fs.createWriteStream(
 
 // body parser
 app.use(express.json());
+
+// Cors
+app.use(cors());
 
 // Using Static files
 app.use(express.static(`${__dirname}/public`));
