@@ -12,7 +12,11 @@ const bookingSchema = new mongoose.Schema(
       ref: "Patient",
       required: [true, "A patient Id is required"],
     },
-    meetingTime: {
+    startTime: {
+      type: String,
+      required: true,
+    },
+    endTime: {
       type: String,
       required: true,
     },
