@@ -35,7 +35,7 @@ const ErrorHandler = (err, req, res, next) => {
     let error = { ...err };
     if (error.name === "CastError") error = handleCastError(error);
     if (error.name === "JsonWebTokenError") error = handleWebTokenError(error);
-    prodError(error, res);
+    prodError(err, res);
   }
   next();
 };
