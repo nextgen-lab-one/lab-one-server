@@ -64,7 +64,14 @@ exports.signIn = (Model) =>
     if (!email || !password) {
       return next(new ErrorObject("Please enter your email and password", 400));
     }
-    const user = await Model.findOne({ email }).select("+password");
+    const user = await Model.findOne({ email });
+    if (!user) {
+      return next(
+        new ErrorObject("There is no user with the inputted email address")
+      );
+    }
+    // const user = await Model.findOne({ email }).select("+password");
+    await user.select("+password");
     const confirmPassword = await bcrypt.compare(password, user.password);
     if (!confirmPassword || !user) {
       return next(new ErrorObject("Invalid email or password", 401));
