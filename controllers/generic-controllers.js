@@ -43,7 +43,6 @@ exports.signUp = (Model) =>
       passwordConfirm,
       address,
       location,
-      userName,
       lastName,
     } = req.body;
     const user = await Model.create({
@@ -53,7 +52,6 @@ exports.signUp = (Model) =>
       passwordConfirm,
       address,
       location,
-      userName,
       lastName,
     });
 
