@@ -20,12 +20,11 @@ const devError = (err, res) => {
 const prodError = (err, res) => {
   res.status(err.statusCode ? err.statusCode : 500).json({
     status: err.status ? err.status : "error",
-    message: err.message ? err.message : "something went wrong",
+    message: err.message ? err.message : "something is wrong",
   });
 };
 
 const ErrorHandler = (err, req, res, next) => {
-  console.log(err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
