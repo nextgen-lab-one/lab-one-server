@@ -1,7 +1,8 @@
 const multer = require("multer");
-const sharp = require("sharp");
+const path = require("path");
 const Doctor = require("../models/doctor-model");
 const catchAsync = require("../utils/catch-async");
+const cloudUpload = require("../utils/cloudinary");
 const sendEmail = require("../utils/email");
 const ErrorObject = require("../utils/error");
 const {
@@ -42,7 +43,7 @@ exports.protectDoctor = protect(Doctor);
 
 exports.sameDoctor = samePerson(Doctor);
 
-const multerStorage = multer.memoryStorage();
+const multerStorage = multer.diskStorage({});
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -61,7 +62,6 @@ exports.uploadDoctorsCertificate = uploadCertificate.single("certificate");
 
 exports.certFormatter = catchAsync(async (req, res, next) => {
   if (req.file) {
-    let timeStamp = Date.now();
     let id = req.params.id;
     const doctor = await Doctor.findById(id);
     if (!doctor) {
@@ -69,15 +69,12 @@ exports.certFormatter = catchAsync(async (req, res, next) => {
         new ErrorObject(`There is no doctor with the ${req.params.id}`, 400)
       );
     }
-    let certificate = `${doctor.lastName}-${timeStamp}.jpeg`;
-
-    req.body.certificate = certificate;
-
-    await sharp(req.file.buffer)
-      .resize(320, 240)
-      .toFormat("jpeg")
-      .jpeg({ quality: 80 })
-      .toFile(`public/doctor/certificates/${certificate}`);
+    const image = {
+      url: req.file.path,
+      id: req.params.id,
+    };
+    const result = await cloudUpload(image);
+    req.body.certificate = result.secure_url;
   }
   next();
 });
