@@ -70,7 +70,6 @@ exports.signIn = (Model) =>
         new ErrorObject("There is no user with the inputted email address")
       );
     }
-    // const user = await Model.findOne({ email }).select("+password");
     await user.select("+password");
     const confirmPassword = await bcrypt.compare(password, user.password);
     if (!confirmPassword || !user) {
