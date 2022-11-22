@@ -43,7 +43,7 @@ app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/records", recordRouter);
 app.all("*", (req, res, next) => {
   const err = new ErrorObject(
-    `http://localhost:${PORT}${req.url} not found`,
+    `${req.protocol}://${req.get("host")}${req.url} not found`,
     404
   );
   next(err);
